@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4E6B3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="I did a thing!">
+<title>I did a thing!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one calm column, three views (Vandaag / Vanavond / Terugkijken), big tap targets grouped like a pantry shelf */
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDEFEA; --card:#F8F9F5; --ink:#262B24; --soft:#646B60; --line:#D6DBD0;
+  --moss:#4E6B3A; --moss-2:#DDE6D3; --on-moss:#F7FAF3;
+  --g-self:#C9DCC0; --g-home:#D8D3E6; --g-kid:#F0D9C2; --g-write:#C9D9E6; --g-other:#E3E0D6;
+  --display:"Young Serif", Georgia, "Times New Roman", serif;
+  --body:"Figtree", -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#181B17; --card:#21251F; --ink:#E8ECE3; --soft:#9DA696; --line:#343A31;
+  --moss:#9DBF84; --moss-2:#2C3826; --on-moss:#14180F;
+  --g-self:#33452D; --g-home:#3A3549; --g-kid:#4A3A2A; --g-write:#2B3C49; --g-other:#383630; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#181B17; --card:#21251F; --ink:#E8ECE3; --soft:#9DA696; --line:#343A31;
+  --moss:#9DBF84; --moss-2:#2C3826; --on-moss:#14180F;
+  --g-self:#33452D; --g-home:#3A3549; --g-kid:#4A3A2A; --g-write:#2B3C49; --g-other:#383630; color-scheme:dark }
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:20px 48px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font:400 2.1rem/1.1 var(--display);margin:0;letter-spacing:-.01em}
+.date{color:var(--soft);font-size:.95rem}
+nav{display:flex;gap:4px;margin:18px 0 20px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
+nav button{flex:1;border:0;background:transparent;border-radius:999px;padding:9px 6px;font:600 .92rem var(--body);color:var(--soft);cursor:pointer}
+nav button[aria-pressed="true"]{background:var(--moss);color:var(--on-moss)}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.kind{display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--moss);margin-bottom:6px}
+.group{margin-top:18px}
+.group h2{font:600 .8rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--soft);margin:0 0 8px}
+.taps{display:flex;flex-wrap:wrap;gap:8px}
+.tap{position:relative;border:0;border-radius:14px;padding:12px 16px;font:500 1rem var(--body);color:var(--ink);background:var(--gc,var(--g-other));cursor:pointer;transition:transform .15s ease}
+.tap:active{transform:scale(.96)}
+.tap .n{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:8px;border-radius:999px;background:var(--card);font-size:.78rem;font-weight:700;font-variant-numeric:tabular-nums}
+.tap.pop{animation:pop .45s ease}
+@keyframes pop{40%{transform:scale(1.07)}}
+.own{display:flex;gap:8px;margin-top:10px}
+.own input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 12px;font:inherit}
+.btn{border:0;border-radius:12px;padding:11px 16px;font:600 .95rem var(--body);background:var(--moss);color:var(--on-moss);cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.list{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.list h2{font:400 1.25rem var(--display);margin:0 0 8px}
+.list ul{list-style:none;margin:0;padding:0}
+.list li{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.list li:first-child{border-top:0}
+.list .t.hr{font-size:.72rem;letter-spacing:.02em}
+.list .t{font-variant-numeric:tabular-nums;color:var(--soft);font-size:.85rem;width:3.2em;flex:none}
+.list .lbl{flex:1;min-width:0}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--gc)}
+.x{border:0;background:transparent;color:var(--soft);font-size:1.1rem;cursor:pointer;padding:4px 8px;border-radius:8px}
+.empty{color:var(--soft);margin:0}
+.letter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 18px}
+.letter p.say{font:400 1.3rem/1.55 var(--display);margin:0 0 14px;text-wrap:pretty}
+.letter label{display:block;font-weight:600;margin:16px 0 6px}
+textarea{width:100%;min-height:80px;resize:vertical;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:10px 12px;font:inherit}
+.muted{color:var(--soft);font-size:.9rem}
+.week-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.week-nav h2{font:400 1.25rem var(--display);margin:0;text-align:center;flex:1}
+.circ{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.2rem;cursor:pointer}
+.circ:disabled{opacity:.35;cursor:default}
+.day{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.day h3{font:600 1rem var(--body);margin:0 0 4px;display:flex;justify-content:space-between;gap:8px}
+.day h3 span{color:var(--soft);font-weight:500;font-size:.85rem}
+.day p{margin:0;color:var(--ink)}
+.day .good{margin-top:6px;color:var(--moss);font-style:italic}
+.sum{font:400 1.15rem/1.5 var(--display);margin:0 0 16px}
+.edit-g{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.edit-g h3{margin:0 0 8px;font:600 1rem var(--body)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:0;border-radius:999px;padding:6px 6px 6px 12px;margin:0 6px 6px 0;background:var(--gc);color:var(--ink);font:inherit;font-size:.92rem}
+.chip button{border:0;background:transparent;color:var(--soft);cursor:pointer;font-size:1rem;padding:0 6px}
+.status{margin-top:28px;font-size:.8rem;color:var(--soft);text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.92rem;transition:opacity .25s,transform .25s;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion: reduce){ .tap.pop{animation:none} .toast{transition:none} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header><h1>I did a thing!</h1><span class="date" id="date"></span></header>
+  <nav aria-label="Weergave">
+    <button id="nav-today" data-view="today" aria-pressed="true">Vandaag</button>
+    <button id="nav-evening" data-view="evening" aria-pressed="false">Vanavond</button>
+    <button id="nav-back" data-view="back" aria-pressed="false">Terugkijken</button>
+    <button id="nav-edit" data-view="edit" aria-pressed="false">Knoppen</button>
+  </nav>
+  <main id="main"></main>
+  <p class="status" id="status">Even laden…</p>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+const GROUPS=[
+  {id:'self',name:'Zorg voor mezelf',color:'var(--g-self)',noun:'zorgde je voor jezelf',plain:'je zorgde voor jezelf'},
+  {id:'home',name:'Thuis',color:'var(--g-home)',noun:'deed je iets in huis',plain:'je deed iets in huis'},
+  {id:'kid',name:'Avery',color:'var(--g-kid)',noun:'was je er voor Avery',plain:'je was er voor Avery'},
+  {id:'write',name:'Schrijven',color:'var(--g-write)',noun:'werkte je aan je verhaal',plain:'je werkte aan je verhaal'},
+  {id:'other',name:'Iets anders',color:'var(--g-other)',noun:'deed je ook nog',plain:'je deed ook nog'}
+];
+const DEFAULT_BUTTONS={
+  self:['Gegeten','Gedoucht','Rust genomen','Buiten geweest','Bewogen'],
+  home:['Was','Opruimen','Boodschappen','Koken'],
+  kid:['Naar school gebracht','Opgehaald','Samen gespeeld'],
+  write:['Geschreven','Aantekeningen','Feel Questions'],
+  other:[]
+};
+const KIND={1:'Bijkomdag',2:'Vaste schrijfdag',3:'Schooldag, geen schrijfdag',4:'Bonusdag',5:'Bonusdag',6:'Weekend',0:'Weekend'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return iso(d)};
+const weekStart=s=>{const d=parse(s);d.setDate(d.getDate()-((d.getDay()+6)%7));return iso(d)};
+const today=()=>iso(new Date());
+const uid=()=>Math.random().toString(36).slice(2,9);
+const gOf=id=>GROUPS.find(g=>g.id===id)||GROUPS[4];
+
+/* ---------- state ---------- */
+const S={buttons:JSON.parse(JSON.stringify(DEFAULT_BUTTONS)),buttonsAt:0,days:{}};
+let view='today', weekOff=0;
+
+/* storage: this device first, then Dropbox (the same Dropbox app as Huisritme, so it can read Huisritme's file) */
+const LS='idat-v1', LS_HR='idat-hr-v1', LS_RT='idat-dbx-refresh', LS_VER='idat-dbx-verifier';
+const DBX_ID='k2a2fputgkhil79', DBX_FILE='/i-did-a-thing.json', HR_FILE='/huisritme-data.json';
+const REDIRECT=location.origin+location.pathname;
+let HR={}; // date -> [task names] from Huisritme
+function loadLocal(){try{const x=JSON.parse(localStorage.getItem(LS)||'null');if(x){if(x.buttons)S.buttons=x.buttons;if(x.days)S.days=x.days;if(x.buttonsAt)S.buttonsAt=x.buttonsAt}}catch(e){}try{HR=JSON.parse(localStorage.getItem(LS_HR)||'{}')||{}}catch(e){HR={}}}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function dayOf(ds){return S.days[ds]||(S.days[ds]={date:ds,items:[],good:'',goodAt:0,removed:[]})}
+function saveDay(ds){ saveLocal(); pushSoon(); }
+function saveButtons(){ S.buttonsAt=Date.now(); saveLocal(); pushSoon(); }
+
+/* ---- Dropbox sign-in (PKCE, no password ever reaches this page) ---- */
+const b64u=buf=>{let t='';new Uint8Array(buf).forEach(c=>t+=String.fromCharCode(c));return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}
+async function dbxConnect(){
+  const r=new Uint8Array(48);crypto.getRandomValues(r);const ver=b64u(r);lsSet(LS_VER,ver);
+  const ch=b64u(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ver)));
+  location.href='https://www.dropbox.com/oauth2/authorize?'+new URLSearchParams({client_id:DBX_ID,response_type:'code',code_challenge:ch,code_challenge_method:'S256',token_access_type:'offline',redirect_uri:REDIRECT});
+}
+function dbxDisconnect(){ lsSet(LS_RT,null); token=null; setStatus('Dropbox losgekoppeld. Alles blijft op dit apparaat.'); render(); }
+let token=null, tokenExp=0;
+async function getToken(){
+  if(token&&Date.now()<tokenExp-60000) return token;
+  const rt=lsGet(LS_RT); if(!rt) return null;
+  const res=await fetch('https://api.dropboxapi.com/oauth2/token',{method:'POST',body:new URLSearchParams({grant_type:'refresh_token',refresh_token:rt,client_id:DBX_ID})});
+  if(!res.ok){ if(res.status===400||res.status===401){ lsSet(LS_RT,null); } return null; }
+  const j=await res.json(); token=j.access_token; tokenExp=Date.now()+(j.expires_in||14400)*1000; return token;
+}
+async function finishSignIn(){
+  const q=new URLSearchParams(location.search); const code=q.get('code'); const err=q.get('error');
+  if(!code&&!err) return;
+  history.replaceState(null,'',REDIRECT);
+  if(err){ setStatus('Dropbox koppelen is afgebroken.'); return; }
+  const ver=lsGet(LS_VER); if(!ver){ setStatus('Koppelen lukte niet. Probeer het nog een keer.'); return; }
+  try{
+    const res=await fetch('https://api.dropboxapi.com/oauth2/token',{method:'POST',body:new URLSearchParams({code,grant_type:'authorization_code',client_id:DBX_ID,code_verifier:ver,redirect_uri:REDIRECT})});
+    const j=await res.json(); if(!res.ok||!j.refresh_token) throw new Error(j.error_description||'token');
+    lsSet(LS_RT,j.refresh_token); lsSet(LS_VER,null); token=j.access_token; tokenExp=Date.now()+(j.expires_in||14400)*1000;
+    toast('Dropbox is gekoppeld');
+  }catch(e){ setStatus('Koppelen lukte niet. Staat dit adres bij de Redirect URIs in Dropbox? '+REDIRECT); }
+}
+async function dbxDown(path){
+  const tk=await getToken(); if(!tk) return {noAuth:true};
+  const res=await fetch('https://content.dropboxapi.com/2/files/download',{method:'POST',headers:{Authorization:'Bearer '+tk,'Dropbox-API-Arg':JSON.stringify({path})}});
+  if(res.status===409) return {notFound:true};
+  if(!res.ok) throw new Error('down '+res.status);
+  return {data:await res.json()};
+}
+async function dbxUp(path,data){
+  const tk=await getToken(); if(!tk) return false;
+  const res=await fetch('https://content.dropboxapi.com/2/files/upload',{method:'POST',headers:{Authorization:'Bearer '+tk,'Content-Type':'application/octet-stream','Dropbox-API-Arg':JSON.stringify({path,mode:'overwrite',mute:true})},body:JSON.stringify(data)});
+  if(!res.ok) throw new Error('up '+res.status); return true;
+}
+
+/* ---- merging: nothing you tapped on one device gets lost on another ---- */
+function mergeIn(r){
+  if(!r||typeof r!=='object') return;
+  if(r.buttons&&(r.buttonsAt||0)>(S.buttonsAt||0)){ S.buttons=r.buttons; S.buttonsAt=r.buttonsAt; }
+  for(const [ds,rd] of Object.entries(r.days||{})){
+    const ld=dayOf(ds); ld.removed=[...new Set([...(ld.removed||[]),...(rd.removed||[])])];
+    const ids=new Set(ld.items.map(i=>i.id)); for(const it of (rd.items||[])) if(!ids.has(it.id)) ld.items.push(it);
+    ld.items=ld.items.filter(i=>!ld.removed.includes(i.id));
+    if((rd.goodAt||0)>(ld.goodAt||0)){ ld.good=rd.good||''; ld.goodAt=rd.goodAt; }
+  }
+}
+let pushT=null, syncing=false, again=false;
+function pushSoon(){ clearTimeout(pushT); pushT=setTimeout(sync,1500); }
+async function sync(){
+  if(!lsGet(LS_RT)){ setStatus('Opgeslagen op dit apparaat. Koppel Dropbox bij Knoppen om je apparaten gelijk te houden.'); return; }
+  if(syncing){ again=true; return; } syncing=true;
+  try{
+    setStatus('Bezig met synchroniseren…');
+    const own=await dbxDown(DBX_FILE);
+    if(own.noAuth){ setStatus('Dropbox moet opnieuw gekoppeld worden, bij Knoppen.'); return; }
+    if(own.data) mergeIn(own.data);
+    await dbxUp(DBX_FILE,{buttons:S.buttons,buttonsAt:S.buttonsAt||0,days:S.days,savedAt:Date.now()});
+    saveLocal();
+    await pullHuisritme();
+    setStatus('Gesynchroniseerd via Dropbox, om '+new Date().toTimeString().slice(0,5)+'.');
+    if(!typing()) render();
+  }catch(e){ setStatus('Synchroniseren lukte even niet. Alles staat wel op dit apparaat.'); }
+  finally{ syncing=false; if(again){ again=false; pushSoon(); } }
+}
+async function pullHuisritme(){
+  const r=await dbxDown(HR_FILE); if(!r.data||!Array.isArray(r.data.tasks)) return;
+  const cut=addDays(today(),-70), map={};
+  for(const t of r.data.tasks){ const nm=(t.name||t.title||'').trim(); if(!nm) continue;
+    for(const d of (t.completions||[])){ const ds=String(d).slice(0,10); if(ds>=cut) (map[ds]=map[ds]||[]).push(nm); } }
+  HR=map; try{localStorage.setItem(LS_HR,JSON.stringify(HR))}catch(e){}
+}
+/* what a day shows: what you tapped, plus what you ticked off in Huisritme */
+function viewDay(ds){
+  const d=S.days[ds]||{date:ds,items:[],good:''};
+  const hr=(HR[ds]||[]).map((nm,i)=>({id:'hr'+i,group:'home',label:nm,t:null,hr:true}));
+  return {date:ds,items:[...(d.items||[]),...hr],good:d.good||'',own:d.items||[]};
+}
+function connect(){ finishSignIn().then(sync); setInterval(()=>{ if(document.visibilityState==='visible') sync(); },5*60000); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') sync(); }); }
+function setStatus(t){ $('#status').textContent=t; }
+function typing(){const a=document.activeElement;return a&&/^(INPUT|TEXTAREA)$/.test(a.tagName)}
+
+/* ---------- words ---------- */
+function niceDate(ds,opt){return parse(ds).toLocaleDateString('nl-NL',opt||{weekday:'long',day:'numeric',month:'long'})}
+function joinNl(a){ if(a.length<2) return a.join(''); return a.slice(0,-1).join(', ')+' en '+a[a.length-1]; }
+function counted(items){ const m=new Map(); items.forEach(i=>m.set(i.label,(m.get(i.label)||0)+1)); return [...m].map(([l,n])=>n>1?`${n}× ${l.toLowerCase()}`:l.toLowerCase()); }
+function sentence(day,you){
+  const items=(day&&day.items)||[]; if(!items.length) return '';
+  const parts=GROUPS.map((g,k)=>{const it=items.filter(i=>i.group===g.id);if(!it.length)return null;return {g,txt:joinNl(counted(it))}}).filter(Boolean);
+  const out=parts.map((x,k)=>`${you||k>0?x.g.noun:x.g.plain} (${x.txt})`);
+  return (you?'Vandaag ':'')+joinNl(out)+'.';
+}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+/* ---------- views ---------- */
+function rToday(){
+  const ds=today(), day=viewDay(ds), cnt={}; day.own.forEach(i=>{cnt[i.group+'|'+i.label]=(cnt[i.group+'|'+i.label]||0)+1});
+  const groups=GROUPS.map(g=>{
+    const btns=(S.buttons[g.id]||[]);
+    if(!btns.length&&g.id!=='other') return '';
+    return `<section class="group"><h2>${esc(g.name)}</h2><div class="taps">${btns.map(l=>{const n=cnt[g.id+'|'+l]||0;return `<button class="tap" style="--gc:${g.color}" data-tap="${esc(g.id)}" data-label="${esc(l)}">${esc(l)}${n?`<span class="n" aria-label="${n} keer">${n}</span>`:''}</button>`}).join('')}</div>
+      ${g.id==='other'?`<form class="own" id="own-form"><input id="own-input" type="text" maxlength="60" placeholder="Iets anders, in een paar woorden" aria-label="Iets anders dat je deed"><button class="btn" type="submit">Erbij</button></form>`:''}</section>`;
+  }).join('');
+  const list=[...day.own].sort((a,b)=>a.t-b.t); const hrList=day.items.filter(i=>i.hr);
+  return `<span class="kind">${esc(KIND[new Date().getDay()])}</span>${groups}
+    <section class="list"><h2>Vandaag gedaan</h2>${list.length||hrList.length?`<ul>${list.map(i=>`<li><span class="t">${esc(new Date(i.t).toTimeString().slice(0,5))}</span><span class="dot" style="--gc:${gOf(i.group).color}"></span><span class="lbl">${esc(i.label)}</span><button class="x" data-del="${esc(i.id)}" aria-label="${esc(i.label)} weghalen">×</button></li>`).join('')}${hrList.map(i=>`<li><span class="t hr">Huisritme</span><span class="dot" style="--gc:${gOf('home').color}"></span><span class="lbl">${esc(i.label)}</span></li>`).join('')}</ul>`:`<p class="empty">Tik op wat je gedaan hebt. Het komt hier te staan. Rust telt ook.</p>`}</section>`;
+}
+function rEvening(){
+  const ds=today(), day=viewDay(ds), s=sentence(day,true);
+  return `<section class="letter"><p class="say">${s?esc(s):'Nog niets aangetikt vandaag. Ook op een dag waarop het voelt alsof je niks deed, heb je meer gedaan dan je denkt. Kijk bij Vandaag wat je kunt aantikken.'}</p>
+    ${s?`<p class="muted">${day.items.length} ${day.items.length===1?'ding':'dingen'} vandaag. Ze tellen allemaal.</p>`:''}
+    <label for="good">Iets wat goed ging <span class="muted">(als je wilt)</span></label>
+    <textarea id="good" placeholder="Eén regel is genoeg">${esc(day.good||'')}</textarea></section>`;
+}
+function rBack(){
+  const ws=addDays(weekStart(today()),weekOff*7), dates=[...Array(7)].map((_,i)=>addDays(ws,i)).filter(d=>d<=today());
+  const lab=`${parse(ws).toLocaleDateString('nl-NL',{day:'numeric',month:'short'})} – ${parse(addDays(ws,6)).toLocaleDateString('nl-NL',{day:'numeric',month:'short'})}`;
+  const all=dates.flatMap(d=>viewDay(d).items);
+  const per=GROUPS.map(g=>({g,n:all.filter(i=>i.group===g.id).length})).filter(x=>x.n);
+  const sum=all.length?`Deze week deed je ${all.length} ${all.length===1?'ding':'dingen'}: ${joinNl(per.map(x=>`${x.n}× ${x.g.name.toLowerCase()}`))}. Dat is wat je hebt vastgelegd, je deed vast nog meer.`:'In deze week staat nog niets. Dat zegt niets over wat je deed, alleen over wat er is aangetikt.';
+  const days=[...dates].reverse().map(d=>{const day=viewDay(d);const s=sentence(day,false);if(!s&&!day.good)return '';
+    return `<article class="day"><h3>${esc(cap(niceDate(d)))}<span>${day.items.length} ${day.items.length===1?'ding':'dingen'}</span></h3>${s?`<p>${esc(cap(s))}</p>`:''}${day.good?`<p class="good">${esc(day.good)}</p>`:''}</article>`}).join('');
+  return `<div class="week-nav"><button class="circ" id="wk-prev" aria-label="Vorige week">‹</button><h2>${esc(lab)}</h2><button class="circ" id="wk-next" aria-label="Volgende week" ${weekOff>=0?'disabled':''}>›</button></div>
+    <p class="sum">${esc(sum)}</p>${days}`;
+}
+function rEdit(){
+  const on=!!lsGet(LS_RT);
+  return `<section class="edit-g"><h3>Dropbox</h3><p class="muted" style="margin:0 0 10px">${on?'Gekoppeld. Je dagen en knoppen blijven gelijk op al je apparaten, en wat je in Huisritme afvinkt komt er vanzelf bij onder Thuis.':'Koppel Dropbox om je apparaten gelijk te houden en je afgevinkte taken uit Huisritme hier te zien. Je logt in bij Dropbox zelf.'}</p>${on?`<div class="own" style="margin:0"><button class="btn" id="dbx-sync" type="button">Nu synchroniseren</button><button class="btn ghost" id="dbx-off" type="button">Loskoppelen</button></div>`:`<button class="btn" id="dbx-on" type="button">Koppel Dropbox</button>`}</section>
+  <p class="muted">Pas je knoppen aan. Ze komen terug op elk apparaat waarop je deze app opent.</p>`+GROUPS.map(g=>`<section class="edit-g"><h3>${esc(g.name)}</h3>
+    <div>${(S.buttons[g.id]||[]).map((l,i)=>`<span class="chip" style="--gc:${g.color}">${esc(l)}<button data-rm="${g.id}|${i}" aria-label="${esc(l)} verwijderen">×</button></span>`).join('')||'<span class="muted">Nog geen knoppen.</span>'}</div>
+    <form class="own" data-add="${g.id}"><input id="add-${g.id}" type="text" maxlength="40" placeholder="Nieuwe knop" aria-label="Nieuwe knop voor ${esc(g.name)}"><button class="btn ghost" type="submit">Toevoegen</button></form></section>`).join('');
+}
+function render(){
+  $('#date').textContent=cap(niceDate(today()));
+  document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+  $('#main').innerHTML={today:rToday,evening:rEvening,back:rBack,edit:rEdit}[view]();
+}
+let toastT;
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),1800)}
+
+/* ---------- events ---------- */
+document.querySelector('nav').addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(!b)return;view=b.dataset.view;if(view!=='back')weekOff=0;render();});
+$('#main').addEventListener('click',e=>{
+  const tap=e.target.closest('[data-tap]');
+  if(tap){ const ds=today(),day=dayOf(ds); day.items.push({id:uid(),group:tap.dataset.tap,label:tap.dataset.label,t:Date.now()}); saveDay(ds); render();
+    const again=document.querySelector(`[data-tap="${CSS.escape(tap.dataset.tap)}"][data-label="${CSS.escape(tap.dataset.label)}"]`); if(again){again.classList.add('pop');}
+    toast(tap.dataset.label+' staat erbij'); return; }
+  const del=e.target.closest('[data-del]');
+  if(del){ const ds=today(),day=dayOf(ds); day.items=day.items.filter(i=>i.id!==del.dataset.del); day.removed=[...(day.removed||[]),del.dataset.del]; saveDay(ds); render(); return; }
+  const rm=e.target.closest('[data-rm]');
+  if(rm){ const [g,i]=rm.dataset.rm.split('|'); S.buttons[g].splice(+i,1); saveButtons(); render(); return; }
+  if(e.target.closest('#dbx-on')){ dbxConnect(); return; }
+  if(e.target.closest('#dbx-off')){ dbxDisconnect(); return; }
+  if(e.target.closest('#dbx-sync')){ sync(); return; }
+  if(e.target.closest('#wk-prev')){ weekOff--; render(); return; }
+  if(e.target.closest('#wk-next')){ if(weekOff<0){weekOff++; render();} return; }
+});
+$('#main').addEventListener('submit',e=>{
+  e.preventDefault(); const f=e.target;
+  if(f.id==='own-form'){ const v=$('#own-input').value.trim(); if(!v) return; const ds=today(); dayOf(ds).items.push({id:uid(),group:'other',label:v,t:Date.now()}); saveDay(ds); render(); toast(v+' staat erbij'); return; }
+  if(f.dataset.add){ const g=f.dataset.add, inp=$('#add-'+g), v=inp.value.trim(); if(!v) return; S.buttons[g]=S.buttons[g]||[]; if(!S.buttons[g].includes(v)) S.buttons[g].push(v); saveButtons(); render(); const n=$('#add-'+g); if(n) n.focus(); }
+});
+$('#main').addEventListener('input',e=>{ if(e.target.id==='good'){ const ds=today(); const d=dayOf(ds); d.good=e.target.value; d.goodAt=Date.now(); saveDay(ds); } });
+
+/* a new day starts while the page is open */
+let last=today(); setInterval(()=>{ if(today()!==last){ last=today(); if(!typing()) render(); } },30000);
+
+loadLocal(); render(); connect();
+})();
+</script>
+
+</body>
+</html>
